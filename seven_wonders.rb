@@ -1,10 +1,20 @@
 require 'httparty'
 require "awesome_print"
+require 'dotenv'
 
-BASE_URL = "THE BASE URL FOR THE API REQUEST"
-LOCATION_IQ_KEY = "YOUR API TOKEN"
+Dotenv.load
+
+BASE_URL = "https://us1.locationiq.com/v1/search.php?"
+LOCATION_IQ_KEY = ENV["api"]
 
 def get_location(search_term)
+  query = {
+      key: LOCATION_IQ_KEY,
+      q: search_term,
+      format: JSON
+  }
+  response = HTTParty.get(BASE_URL, query: query)
+  return {search_term => {:lat => response[0]["lat"], :lon => response[0]["lon"]}}
 
 end
 
